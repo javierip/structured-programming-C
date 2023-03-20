@@ -1,3 +1,7 @@
+# Code::Blocks excluded
+*.depend
+*.layout
+
 # Prerequisites
 *.d
 
