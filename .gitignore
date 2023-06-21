@@ -4,6 +4,7 @@
 
 # Visual Studio Code excluded
 *.vscode
+main
 
 # Prerequisites
 *.d
