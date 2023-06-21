@@ -2,6 +2,9 @@
 *.depend
 *.layout
 
+# Visual Studio Code excluded
+*.vscode
+
 # Prerequisites
 *.d
 
