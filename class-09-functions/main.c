@@ -25,6 +25,8 @@ int main()
 
     printf("Temperature in Fahrenheit scale is: %4.2lf\n", celsius_to_fahrenheit(temp_celsius));
     printf("Temperature in Kelvin scale is: %4.2lf\n", celcius_a_kelvin(temp_celsius));
+	
+	printf("End of program\n");
 
     return 0;
 }
