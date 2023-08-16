@@ -6,6 +6,3 @@
 * Author: [Javier Iparraguirre](https://javierip.github.io/)
 
 Any contributions welcome.
-
-
-
