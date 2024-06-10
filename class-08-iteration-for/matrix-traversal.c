@@ -24,7 +24,7 @@ int main()
         }
     }
 
-    // print content
+    printf("Matrix content\n");
     for (row = 0; row < N_COLUMNS; row++)
     {
         for (column = 0; column < N_COLUMNS; column++)
@@ -35,7 +35,7 @@ int main()
     }
     printf("\n");
 
-    // follow L path
+    printf("Follow L shape\n");
     for (lap = 0; lap < N_LAPS; lap++)
     {
         column = 0 + lap;

@@ -21,7 +21,7 @@ int main()
     while (!end_arrived)
     {
 
-        printf("Valor? ");
+        printf("Number?: ");
         scanf("%d", &guessedNumber);
 
         // Correct number

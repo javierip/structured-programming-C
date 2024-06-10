@@ -10,7 +10,7 @@ const char LEFT = 'L';
 const char CENTER = 'C';
 const char RIGHT = 'R';
 
-void move(int n, char pilaOrigen, char pilaDestino, char pilaTemp);
+void move(int n, char origin_tower, char target_tower, char temp_tower);
 
 int main()
 {
@@ -26,19 +26,18 @@ int main()
     return 0;
 }
 
-void move(int disk_number, char origin, char target, char temporal)
+void move(int number_disks, char origin_tower, char target_tower, char temp_tower)
 {
-
-    if (disk_number == 0)
-        // Base case
+    // Base case
+    if (number_disks == 0)
+    {
         return;
+    }
+    // Recursive case
     else
     {
-        // Recursive case
-        move(disk_number - 1, origin, temporal, target);
-
-        printf("Move disk %d form %3c to %c.\n", disk_number, origin, target);
-
-        move(disk_number - 1, temporal, target, origin);
+        move(number_disks - 1, origin_tower, temp_tower, target_tower);
+        printf("Move disk %d form %3c to %c.\n", number_disks, origin_tower, target_tower);
+        move(number_disks - 1, temp_tower, target_tower, origin_tower);
     }
 }
