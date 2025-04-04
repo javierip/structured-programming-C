@@ -3,6 +3,10 @@
  * E-mail: jiparraguirre@frbb.utn.edu
  */
 
+// See this site for more information: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/scanf-scanf-s?view=msvc-160
+// This site "hacks" the warning https://yyoungha.github.io/c/warning/post/
+
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
 int main(void)
