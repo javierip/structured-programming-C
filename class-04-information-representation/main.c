@@ -12,7 +12,7 @@
 int main(void)
 {
     int integer_1, integer_2;
-    double result;
+    double a_double;
     long a_long;
     long long int a_long_long;
     short a_short;
@@ -21,16 +21,16 @@ int main(void)
     integer_2 = 10;
 
     printf("\n Silent and explicit conversions \n");
-    result = integer_1 / integer_2;
-    printf("Result of int division %lf \n", result);
+    a_double = integer_1 / integer_2;
+    printf("Result of int division %lf \n", a_double);
 
-    result = (double)integer_1 / (double)integer_2;
-    printf("Result of explicit float division %lf \n", result);
-    printf("Result of explicit float division with format %4.2lf \n", result);
-    printf("Result of explicit float division with another format %.6lf \n", result);
+    a_double = (double)integer_1 / (double)integer_2;
+    printf("Result of explicit float division %lf \n", a_double);
+    printf("Result of explicit float division with format %4.2lf \n", a_double);
+    printf("Result of explicit float division with another format %.6lf \n", a_double);
 
     printf("\n Sizes \n");
-    printf("Size of a float int bytes %d \n", sizeof(result));
+    printf("Size of a double int bytes %d \n", sizeof(a_double));
     printf("Size of an integer bytes %d \n", sizeof(integer_1));
     printf("Size of an short bytes %d \n", sizeof(a_short));
     printf("Size of an long bytes %d \n", sizeof(a_long));
