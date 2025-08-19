@@ -1,4 +1,4 @@
-/* Program: Do matrix operations
+/* Program: Matrix operations
  * Author: Javier Iparraguirre
  * E-mail: jiparraguirre@frbb.utn.edu
  */
@@ -41,7 +41,7 @@ void print_matrix(const double arr[N][N])
 {
 	int i, j;
 
-	printf("Matrix\n");
+	printf("Matrix contents:\n");
 
 	for (i = 0; i < N; i++)
 	{
@@ -72,8 +72,11 @@ int main(void)
 	double addition[N][N];
 	double result[N][N];
 
+	printf("Matrix A:\n");
+	print_matrix(matrix_a);
 	add_matrices(addition, matrix_a, matrix_b);
 	multiply_matrices(result, matrix_c, addition);
+	printf("Matrix result:\n");
 	print_matrix(result);
 
 	return 0;
