@@ -1,8 +1,23 @@
+// Cross-platform Pong Game in C
+// Compatible with Windows, Linux, and macOS
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
-#include <windows.h>
 #include <time.h>
+#include <string.h>
+
+// Platform detection
+#ifdef _WIN32
+    #include <conio.h>
+    #include <windows.h>
+    #define PLATFORM_WINDOWS
+#elif defined(__linux__) || defined(__APPLE__)
+    #include <unistd.h>
+    #include <termios.h>
+    #include <fcntl.h>
+    #include <sys/select.h>
+    #define PLATFORM_UNIX
+#endif
 
 // Game constants
 #define FIELD_WIDTH 80
@@ -35,6 +50,18 @@ Ball ball;
 Paddle player_paddle;
 Paddle ai_paddle;
 GameState game_state;
+
+// Cross-platform function declarations
+void cross_platform_sleep(int milliseconds);
+int cross_platform_kbhit(void);
+int cross_platform_getch(void);
+void setup_terminal(void);
+void restore_terminal(void);
+
+#ifdef PLATFORM_UNIX
+static struct termios old_terminal_settings;
+static int terminal_setup = 0;
+#endif
 
 // Function declarations
 void initialize_game(void);
@@ -75,18 +102,86 @@ void initialize_game(void)
 }
 
 // Move cursor to specific position
-void gotoxy(int x, int y)
-{
-    COORD coord;
-    coord.X = x;
-    coord.Y = y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+// Cross-platform terminal setup
+void setup_terminal(void) {
+#ifdef PLATFORM_UNIX
+    if (!terminal_setup) {
+        struct termios new_settings;
+        tcgetattr(0, &old_terminal_settings);
+        new_settings = old_terminal_settings;
+        new_settings.c_lflag &= ~(ICANON | ECHO);
+        new_settings.c_cc[VMIN] = 0;
+        new_settings.c_cc[VTIME] = 0;
+        tcsetattr(0, TCSANOW, &new_settings);
+        terminal_setup = 1;
+    }
+#endif
 }
 
-// Clear screen
-void clear_screen(void)
-{
-    system("cls");
+// Cross-platform terminal restoration
+void restore_terminal(void) {
+#ifdef PLATFORM_UNIX
+    if (terminal_setup) {
+        tcsetattr(0, TCSANOW, &old_terminal_settings);
+        terminal_setup = 0;
+    }
+#endif
+}
+
+// Cross-platform sleep function
+void cross_platform_sleep(int milliseconds) {
+#ifdef PLATFORM_WINDOWS
+    Sleep(milliseconds);
+#elif defined(PLATFORM_UNIX)
+    usleep(milliseconds * 1000);
+#endif
+}
+
+// Cross-platform keyboard hit detection
+int cross_platform_kbhit(void) {
+#ifdef PLATFORM_WINDOWS
+    return _kbhit();
+#elif defined(PLATFORM_UNIX)
+    int ch;
+    int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+    ch = getchar();
+    fcntl(STDIN_FILENO, F_SETFL, flags);
+    if (ch != EOF) {
+        ungetc(ch, stdin);
+        return 1;
+    }
+    return 0;
+#endif
+}
+
+// Cross-platform get character function
+int cross_platform_getch(void) {
+#ifdef PLATFORM_WINDOWS
+    return _getch();
+#elif defined(PLATFORM_UNIX)
+    int ch;
+    struct termios old_settings, new_settings;
+    tcgetattr(STDIN_FILENO, &old_settings);
+    new_settings = old_settings;
+    new_settings.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
+    return ch;
+#endif
+}
+
+// Cross-platform cursor positioning using ANSI escape sequences
+void gotoxy(int x, int y) {
+    printf("\033[%d;%dH", y + 1, x + 1);
+    fflush(stdout);
+}
+
+// Clear screen using ANSI escape sequence
+void clear_screen(void) {
+    printf("\033[2J\033[H");
+    fflush(stdout);
 }
 
 // Draw the entire game
@@ -197,9 +292,9 @@ void reset_ball(void)
 // Handle player paddle movement
 void update_player_paddle(void)
 {
-    if (_kbhit())
+    if (cross_platform_kbhit())
     {
-        char key = _getch();
+        char key = cross_platform_getch();
         switch (key)
         {
         case 'w':
@@ -277,11 +372,14 @@ void check_collisions(void)
 // Main game function
 int main(void)
 {
+    // Setup terminal for cross-platform compatibility
+    setup_terminal();
+    
     printf("Welcome to Pong!\n");
     printf("Use W and S keys to control your paddle.\n");
     printf("First to %d points wins!\n", WINNING_SCORE);
     printf("Press any key to start...\n");
-    _getch();
+    cross_platform_getch();
 
     initialize_game();
 
@@ -297,7 +395,7 @@ int main(void)
         check_collisions();
 
         // Game speed control
-        Sleep(100);
+        cross_platform_sleep(100);
     }
 
     // Game over screen
@@ -316,7 +414,10 @@ int main(void)
     }
     printf("\n    Thanks for playing!\n");
     printf("    Press any key to exit...\n");
-    _getch();
+    cross_platform_getch();
+
+    // Restore terminal settings
+    restore_terminal();
 
     return 0;
 }
