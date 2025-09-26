@@ -23,11 +23,13 @@ This version has been completely rewritten to remove all operating system depend
 ## 🕹️ How to Play
 
 ### Controls
+
 - **W** - Move your paddle up
 - **S** - Move your paddle down  
 - **ESC** - Quit the game (Windows) or Ctrl+C (Unix systems)
 
 ### Gameplay
+
 1. Your paddle is on the left side of the screen
 2. The AI paddle is on the right side
 3. Use W and S keys to move your paddle up and down
@@ -39,16 +41,19 @@ This version has been completely rewritten to remove all operating system depend
 ## 🔧 Compilation
 
 ### Windows (with GCC/MinGW)
+
 ```bash
 gcc -o pong.exe main.c
 ```
 
 ### Linux
+
 ```bash
 gcc -o pong main.c
 ```
 
 ### macOS
+
 ```bash
 clang -o pong main.c
 # or
@@ -56,6 +61,7 @@ gcc -o pong main.c
 ```
 
 ### Visual Studio (Windows)
+
 ```bash
 cl main.c /Fe:pong.exe
 ```
@@ -63,11 +69,13 @@ cl main.c /Fe:pong.exe
 ## 🚀 Running the Game
 
 ### Windows
+
 ```bash
 ./pong.exe
 ```
 
 ### Linux/macOS
+
 ```bash
 ./pong
 ```
@@ -115,22 +123,26 @@ The game uses conditional compilation to provide platform-specific implementatio
 ## 📋 Requirements
 
 ### Universal Requirements
+
 - C compiler (GCC, Clang, or MSVC)
 - Terminal/Console with ANSI escape sequence support
 
 ### Platform-Specific Requirements
 
 #### Windows
+
 - **MinGW/GCC**: Recommended for cross-platform development
 - **Visual Studio**: MSVC compiler with Windows SDK
 - **Windows Console**: Built-in support for ANSI sequences (Windows 10+)
 
 #### Linux
+
 - **GCC or Clang**: Standard system compiler
 - **Terminal**: Any POSIX-compliant terminal (bash, zsh, etc.)
 - **Libraries**: Standard C library with POSIX extensions
 
 #### macOS
+
 - **Xcode Command Line Tools**: `xcode-select --install`
 - **Clang or GCC**: Available through Xcode or Homebrew
 - **Terminal**: Built-in Terminal.app or any compatible terminal
@@ -138,6 +150,7 @@ The game uses conditional compilation to provide platform-specific implementatio
 ## 🔍 Code Structure
 
 ### Header Files by Platform
+
 ```c
 // Universal
 #include <stdio.h>
@@ -160,10 +173,12 @@ The game uses conditional compilation to provide platform-specific implementatio
 ```
 
 ### Platform Detection
+
 - `PLATFORM_WINDOWS` - Windows systems
 - `PLATFORM_UNIX` - Linux and macOS systems
 
 ### Game Components
+
 - **Ball Structure**: Position and velocity tracking
 - **Paddle Structure**: Position and dimensions
 - **Game State**: Score and status management
@@ -175,6 +190,7 @@ The game uses conditional compilation to provide platform-specific implementatio
 ## 🧪 Testing
 
 The game has been tested on:
+
 - ✅ Windows 10/11 (MinGW-GCC, Visual Studio)
 - ✅ Linux (Ubuntu, Debian, CentOS)
 - ✅ macOS (Monterey, Ventura)
@@ -182,6 +198,7 @@ The game has been tested on:
 ## 🎯 Technical Highlights
 
 ### C Programming Concepts Demonstrated
+
 - **Conditional Compilation**: Platform-specific code paths
 - **Structure Programming**: Clean data organization
 - **Function Abstraction**: Cross-platform API design
@@ -190,6 +207,7 @@ The game has been tested on:
 - **ANSI Escape Sequences**: Universal terminal control
 
 ### Performance Features
+
 - **Efficient Rendering**: Minimal screen updates
 - **Responsive Controls**: Non-blocking input system
 - **Optimized Physics**: Simple collision detection
