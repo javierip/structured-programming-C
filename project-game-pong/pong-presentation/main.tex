@@ -53,7 +53,7 @@
 
 \urldef{\email}\path|jiparraguirre@frbb.utn.edu.ar|
 \title[]{La Evolución de un Clásico: Un Proyecto de Pong en Tres Partes}
-\subtitle{De la Consola a los Gráficos en C y C++}
+\subtitle{De la Consola a los Gráficos en C}
 
 \author[J. Iparraguirre] {Javier Iparraguirre}
 
@@ -159,17 +159,19 @@ void draw_game(void)
   \frametitle{Implementación 3: El Salto a Gráficos - SDL3}
   \subtitle{\texttt{03-simple-visual-studio-sdl}: Un Enfoque Moderno}
   \begin{itemize}
-    \item \textbf{Lenguaje:} Transición de C a C++.
+    \item \textbf{Lenguaje:} C.
     \item \textbf{Librería Gráfica:} Utiliza la potente librería SDL3 para renderizado 2D.
     \item \textbf{Visuales:} Gráficos fluidos y acelerados por hardware reemplazan la interfaz ASCII.
     \item \textbf{Características Avanzadas:} Introduce conceptos más complejos como sistemas de tiempo real y una IA mejorada.
   \end{itemize}
 \end{frame}
 
+{
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{theme/utn-bhi-page-blank.png}}
 \begin{frame}[fragile]
   \frametitle{Implementación 3: Avances Técnicos}
   \begin{itemize}
-    \item \textbf{Principios Orientados a Objetos:} El juego se estructura en torno a las clases \texttt{GameObject} y \texttt{GameState} \cite{pong_sdl_main}.
+    \item \textbf{Principios Orientados a Estructuras:} El juego se estructura en torno a \texttt{GameObject} y \texttt{GameState} \cite{pong_sdl_main}.
     \item \textbf{Programación Orientada a Eventos:} El bucle del juego ahora es impulsado por eventos de SDL para la entrada y gestión de la ventana \cite{pong_sdl_main}.
     \item \textbf{Renderizado:} El renderizador de SDL se utiliza para dibujar formas y gestionar la ventana del juego \cite{pong_sdl_main}.
     \item \textbf{IA:} La IA es más receptiva e inteligente, con su propia lógica de actualización \cite{pong_sdl_main}.
@@ -184,6 +186,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 }
   \end{lstlisting}
 \end{frame}
+}
 
 \section{Comparando las Implementaciones}
 \begin{frame}
@@ -195,7 +198,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
   \toprule
   \textbf{Característica} & \textbf{01-simple} & \textbf{02-simple-vs} & \textbf{03-simple-sdl} \\
   \midrule
-  Lenguaje & C & C & C++ \\
+  Lenguaje & C & C & C \\
   Gráficos & ASCII & ASCII & SDL3 \\
   Plataforma & Multi-plataforma & Multi-plataforma & Windows (Config.) \\
   Desarrollo & Editor Básico & Visual Studio & Visual Studio \\
@@ -213,7 +216,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
   \begin{itemize}
     \item \textbf{\texttt{01-simple}:} Domina los fundamentos de la programación en C y el desarrollo multiplataforma.
     \item \textbf{\texttt{02-simple-visual-studio}:} Aprende prácticas de desarrollo profesional y los beneficios de un IDE.
-    \item \textbf{\texttt{03-simple-visual-studio-sdl}:} Sumérgete en el mundo de la programación gráfica, C++ y el desarrollo de juegos moderno.
+    \item \textbf{\texttt{03-simple-visual-studio-sdl}:} Introduce el mundo de la programación gráfica y el desarrollo de juegos.
   \end{itemize}
 \end{frame}
 
