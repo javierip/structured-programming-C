@@ -3,66 +3,106 @@
 #include <string.h> // For strcpy
 
 // Define the structure
-typedef struct MyStruct
+typedef struct Student
 {
     int id;
     char name[50];
-    float value;
-} MyStruct;
+    float weight;
+} Student;
+
+// Function to generate structures with sample data
+void generateStructures(Student data[], int count)
+{
+    for (int i = 0; i < count; i++)
+    {
+        data[i].id = i + 1;
+        sprintf(data[i].name, "Student %d", i + 1);
+        data[i].weight = (float)rand() / RAND_MAX * 100; // Random value between 0 and 100
+    }
+}
+
+// Function to save structures to a binary file
+int saveStructuresToFile(const char *filename, Student data[], int count)
+{
+    FILE *file = fopen(filename, "wb");
+    if (file == NULL)
+    {
+        perror("Error opening file for writing");
+        return 0; // Return 0 for failure
+    }
+
+    size_t written = fwrite(data, sizeof(Student), count, file);
+    fclose(file);
+
+    if (written != count)
+    {
+        fprintf(stderr, "Error writing data to file. Written %zu items\n", written);
+        return 0; // Return 0 for failure
+    }
+
+    printf("%d structures generated and saved to %s\n", count, filename);
+    return 1; // Return 1 for success
+}
+
+// Function to read structures from a binary file
+int readStructuresFromFile(const char *filename, Student data[], int count)
+{
+    FILE *file = fopen(filename, "rb");
+    if (file == NULL)
+    {
+        perror("Error opening file for reading");
+        return 0; // Return 0 for failure
+    }
+
+    size_t numRead = fread(data, sizeof(Student), count, file);
+    fclose(file);
+
+    if (numRead != count)
+    {
+        fprintf(stderr, "Error reading data from file. Read %zu items\n", numRead);
+        return 0; // Return 0 for failure
+    }
+
+    return 1; // Return 1 for success
+}
+
+// Function to display structures
+void displayStructures(Student data[], int count)
+{
+    printf("\nDisplaying %d structures:\n", count);
+    printf("%-5s %-15s %-10s\n", "ID", "Name", "Value");
+    printf("%-5s %-15s %-10s\n", "---", "---------------", "----------");
+
+    for (int i = 0; i < count; i++)
+    {
+        printf("%-5d %-15s %-10.2f\n",
+               data[i].id, data[i].name, data[i].weight);
+    }
+}
 
 int main()
 {
-    // Generate 10 structures
-    MyStruct data[10];
-    for (int i = 0; i < 10; i++)
-    {
-        data[i].id = i + 1;
-        strcpy(data[i].name, "Structure ");
-        // Add the ID as a character to the name
-        data[i].name[strlen(data[i].name)] = i + '1';
-        data[i].name[strlen(data[i].name)] = '\0';      // Null-terminate the string
-        data[i].value = (float)rand() / RAND_MAX * 100; // Random value between 0 and 100
-    }
+    const int COUNT = 10;
+    const char *FILENAME = "data.bin";
+    Student data[COUNT];
+
+    // Generate structures with sample data
+    generateStructures(data, COUNT);
 
     // Save the structures to a file
-    FILE *file = fopen("data.bin", "wb");
-    if (file == NULL)
+    if (!saveStructuresToFile(FILENAME, data, COUNT))
     {
-        perror("Error opening file");
-        return 1;
+        return 1; // Exit with error code
     }
 
-    fwrite(data, sizeof(MyStruct), 10, file);
-
-    fclose(file);
-    printf("10 structures generated and saved to data.bin\n");
-
-    file = fopen("data.bin", "rb");
-    if (file == NULL)
+    // Read structures from the file
+    if (!readStructuresFromFile(FILENAME, data, COUNT))
     {
-        perror("Error opening file");
-        return 1;
+        return 1; // Exit with error code
     }
 
-    // Read 10 structures from the file
-    // size_t numRead = fread(data, sizeof(MyStruct), 10, file);
-    unsigned long numRead = fread(data, sizeof(MyStruct), 10, file);
-
-    if (numRead != 10)
-    {
-        fprintf(stderr, "Error reading data from file. Read %zu items\n", numRead);
-    }
-    else
-    {
-        // Print the data read from the file
-        for (int i = 0; i < 10; i++)
-        {
-            printf("ID: %d, Name: %s, Value: %.2f\n",
-                   data[i].id, data[i].name, data[i].value);
-        }
-    }
-
-    fclose(file);
+    // Display the data read from the file
+    displayStructures(data, COUNT);
 
     return 0;
 }
