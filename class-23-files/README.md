@@ -1,41 +1,50 @@
 # Class 23 - File Operations
 
-A simple C program demonstrating binary file operations with structures.
+Simple C programs demonstrating file I/O operations in C.
 
-## Description
+## Programs
 
-This program shows how to:
+### text-example.c
+Demonstrates text file operations including:
+- Creating text files with `fprintf`
+- Reading text files with `fscanf`
+- File error handling
+- File size calculation
+- Different display modes
 
-- Create an array of Student structures
-- Save structures to a binary file
-- Read structures from a binary file
-- Display the data
+### structures-example.c
+Shows binary file operations with structures:
+- Writing structures to binary files
+- Reading structures from binary files
+- Structure data persistence
 
-## Structure
+## Key Concepts
 
-The `Student` structure contains:
-
-- `id`: Student ID number
-- `name`: Student name (up to 50 characters)
-- `weight`: Student weight (float value)
+- File pointers (`FILE*`)
+- File opening modes (`"r"`, `"w"`, `"rb"`, `"wb"`)
+- Error checking (`NULL` pointer validation)
+- File positioning (`fseek`, `ftell`)
+- Formatted I/O (`fprintf`, `fscanf`)
+- Binary I/O (`fread`, `fwrite`)
 
 ## Compilation
 
 ```bash
-gcc -o main main.c
+gcc -o text-example text-example.c
+gcc -o main structures-example.c
 ```
 
-## Execution
+## Usage
 
 ```bash
-./main
+./text-example    # Text file operations demo
+./main           # Binary file operations demo
 ```
 
-## Output
+## Learning Objectives
 
-The program will:
-
-1. Generate 10 student records
-2. Save them to `data.bin`
-3. Read them back from the file
-4. Display the results in a formatted table
+- File handling in C
+- Error checking best practices
+- Text vs binary file operations
+- File positioning and size calculation
+- Structured data persistence
