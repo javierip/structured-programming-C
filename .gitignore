@@ -6,6 +6,9 @@
 *.vscode
 main
 
+# Binary files
+*.bin
+
 # Prerequisites
 *.d
 

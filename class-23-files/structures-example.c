@@ -1,6 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> // For strcpy
+#include <string.h>
 
 // Define the structure
 typedef struct Student
@@ -17,7 +19,7 @@ void generateStructures(Student data[], int count)
     {
         data[i].id = i + 1;
         sprintf(data[i].name, "Student %d", i + 1);
-        data[i].weight = (float)rand() / RAND_MAX * 100; // Random value between 0 and 100
+        data[i].weight = (float)rand() / RAND_MAX * 100.0; // Random value between 0 and 100
     }
 }
 
@@ -92,13 +94,13 @@ int main()
     // Save the structures to a file
     if (!saveStructuresToFile(FILENAME, data, COUNT))
     {
-        return 1; // Exit with error code
+        return 1;
     }
 
     // Read structures from the file
     if (!readStructuresFromFile(FILENAME, data, COUNT))
     {
-        return 1; // Exit with error code
+        return 1;
     }
 
     // Display the data read from the file
