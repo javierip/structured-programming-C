@@ -1,36 +1,66 @@
-/* Program: Variables and sequences
+/* Program: Variables and Sequences
  * Author: Javier Iparraguirre
- * E-mail: jiparraguirre@frbb.utn.edu
+ * E-mail: jiparraguirre@frbb.utn.edu.ar
+ *
+ * Demonstrates: variable declaration, the assignment instruction,
+ * the sequential control structure, and console I/O with scanf/printf.
  */
-
-// See this site for more information: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/scanf-scanf-s?view=msvc-160
-// This site "hacks" the warning https://yyoungha.github.io/c/warning/post/
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
 int main(void)
 {
-    int edad;
-    double peso_actual, peso_al_nacer, aumento_peso;
+    /* --- Variable declarations ---
+     * Every variable must be declared before it is used.
+     * Syntax:  <type> <identifier>;
+     *
+     *   int    -> integer numbers  (e.g. 30)
+     *   double -> floating-point numbers (e.g. 65.5)
+     *
+     * Identifier rules:
+     *   - Must start with a letter or underscore (_)
+     *   - Subsequent characters: letters or digits only
+     *   - Case-sensitive: age != Age
+     *   - Cannot be a reserved keyword (int, double, return, ...)
+     */
+    int    age;
+    double birth_weight, current_weight, weight_gain;
 
-    printf("Hola! ");
-    printf("Hello!\n");
+    /* --- Sequential structure ---
+     * Instructions execute in the exact order they are written.
+     * Changing the order changes (or breaks) the result.
+     */
 
-    printf("Ingrese su edad: ");
-    scanf("%d", &edad);
+    printf("=== Weight gain calculator ===\n\n");
 
-    printf("Ingrese su peso al nacer: ");
-    scanf("%lf", &peso_al_nacer);
+    /* INPUT: scanf reads a value from the keyboard into a variable.
+     *   %d  -> format specifier for int
+     *   %lf -> format specifier for double
+     *   &   -> address-of operator: tells scanf WHERE to store the value
+     */
+    printf("Enter your age (years)       : ");
+    scanf("%d", &age);
 
-    printf("Ingrese su peso actual: ");
-    scanf("%lf", &peso_actual);
+    printf("Enter your birth weight (kg) : ");
+    scanf("%lf", &birth_weight);
 
-    aumento_peso = peso_actual - peso_al_nacer;
+    printf("Enter your current weight (kg): ");
+    scanf("%lf", &current_weight);
 
-    printf("Usted tiene %d anios\n", edad);
-    printf("Actualmente pesa %lf kg.\n", peso_actual);
-    printf("Ha aumentado %lf kilos.\n", aumento_peso);
+    /* ASSIGNMENT: writing a variable overwrites its previous value.
+     * The right-hand side is evaluated first, then stored in weight_gain.
+     */
+    weight_gain = current_weight - birth_weight;
+
+    /* OUTPUT: printf prints values to the console.
+     *   %d   -> int
+     *   %.2lf -> double, 2 decimal places
+     */
+    printf("\n--- Results ---\n");
+    printf("Age           : %d years\n",   age);
+    printf("Current weight: %.2lf kg\n",   current_weight);
+    printf("Weight gain   : %.2lf kg\n",   weight_gain);
 
     return 0;
 }

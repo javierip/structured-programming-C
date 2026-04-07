@@ -18,6 +18,14 @@ project-game-pong/
 │       ├── main.cpp               # SDL3 graphics game
 │       ├── simplePongSDL.vcxproj  # VS project with SDL3
 │       └── README.md              # SDL3 version docs
+├── pong-presentation/             # LaTeX Beamer presentation
+│   ├── main.tex                   # Presentation source
+│   ├── main.pdf                   # Compiled presentation
+│   ├── references.bib             # Bibliography
+│   ├── run.sh                     # Build script
+│   ├── figures/                   # Slide images
+│   ├── output/                    # Compiled output directory
+│   └── README.md                  # Presentation docs
 └── README.md                      # This file
 ```
 
