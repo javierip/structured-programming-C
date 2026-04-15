@@ -16,6 +16,7 @@ int main(void)
     long a_long;
     long long int a_long_long;
     short a_short;
+    char letter, digit;
 
     integer_1 = 5;
     integer_2 = 10;
@@ -51,6 +52,29 @@ int main(void)
     printf("Value of long long %lld\n", a_long_long);
     printf("Value of int %d\n", integer_1);
 
+    printf("\n ASCII and Hexadecimal \n");
+
+    // A char stores its ASCII numeric value — the same byte printed three ways
+    letter = 'A';
+    printf("Char | Decimal | Hexadecimal\n");
+    printf(" %c   |   %d    |   %X\n", letter, letter, letter);
+
+    letter = 'a';
+    printf(" %c   |   %d    |   %X\n", letter, letter, letter);
+
+    digit = '0';
+    printf(" %c   |   %d    |   %X\n", digit, digit, digit);
+
+    // Arithmetic on chars works because they are integers
+    letter = 'A';
+    printf("'A' + 1 = '%c' (decimal %d)\n", letter + 1, letter + 1);
+
+    // A hex literal is just another way to write an integer constant
+    integer_1 = 0x41; // 65 in decimal = 'A' in ASCII
+    printf("0x41 = decimal %d = character '%c'\n", integer_1, integer_1);
+
+    integer_1 = 0xFF; // 255 in decimal
+    printf("0xFF = decimal %d\n", integer_1);
+
     return 0;
 }
-
