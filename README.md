@@ -19,7 +19,7 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 | 3 | Algorithms | [class-03](class-03-algorithms-sequences/) |
 | 4 | Operators and Numerical Expressions | [class-04](class-04-operators-expressions/) |
 | 5 | Information Representation | [class-05](class-05-information-representation/) |
-| 6 | Selection | [class-06](class-05-flow-control/) |
+| 6 | Selection | [class-06](class-06-flow-control/) |
 | 7 | Integration of Concepts Reviewed | — |
 | 8 | **First Evaluation Instance** | — |
 
