@@ -26,9 +26,4 @@ Converts a month number (1–12) into its corresponding name using a `switch` st
 
 **Concepts:** `switch`, `case`, `default`, `break`
 
-## Output
 
-Compiled executables are located in the [output/](output/) folder:
-
-- `main-if.exe`
-- `main-switch.exe`
