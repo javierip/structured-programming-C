@@ -13,10 +13,10 @@ int main()
 {
     int row = 0, column = 0, lap;
 
-    int matrix[N_COLUMNS][N_ROWS] = {0};
+    int matrix[N_ROWS][N_COLUMNS] = {0};
 
     // load values
-    for (row = 0; row < N_COLUMNS; row++)
+    for (row = 0; row < N_ROWS; row++)
     {
         for (column = 0; column < N_COLUMNS; column++)
         {
@@ -25,7 +25,7 @@ int main()
     }
 
     printf("Matrix content\n");
-    for (row = 0; row < N_COLUMNS; row++)
+    for (row = 0; row < N_ROWS; row++)
     {
         for (column = 0; column < N_COLUMNS; column++)
         {
