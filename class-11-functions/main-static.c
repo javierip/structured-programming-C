@@ -25,16 +25,18 @@ void measure_time()
 
     long initial_time = clock();
     long actual_time = clock();
-    long delta = 0.0;
+    long delta = 0;
 
     do
     {
         actual_time = clock();
         delta = actual_time - initial_time;
 
-    } while (delta < 2500);
+    } while (delta * 1000 / CLOCKS_PER_SEC < 2500);
 
     accumulated_time += delta;
 
-    printf("This execution took [ms] = %ld. Total time [ms] = %ld\n", delta, accumulated_time);
+    printf("This execution took [ms] = %ld. Total time [ms] = %ld\n",
+           delta * 1000 / CLOCKS_PER_SEC,
+           accumulated_time * 1000 / CLOCKS_PER_SEC);
 }
