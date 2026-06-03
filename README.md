@@ -29,7 +29,7 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 |------|-------|-----------|
 | 9 | Repetition - I | [class-09](class-09-iteration-while/) |
 | 10 | Repetition - II | [class-10](class-10-iteration-for/) |
-| 11 | Functions | [class-11](class-11-functions/), [class-10](class-10-functions-static-variables/) |
+| 11 | Functions | [class-11](class-11-functions/) |
 | 12 | Recursion | [class-11](class-11-functions-recursion/) |
 | 13 | Integration of Concepts Reviewed | — |
 | 14 | **Second Evaluation Instance** | — |
