@@ -19,6 +19,9 @@ side by side — only the drawing changes:
   2022 solution. See its own [README](super-simple-game-SDL/README.md) for
   build instructions. The bundled `SDL3/` SDK is not tracked in git — the
   linked README explains how to obtain it.
+* `presentation/`: a LaTeX/Beamer presentation that explains the example and
+  how it integrates the week 9–13 concepts. See its own
+  [README](presentation/README.md) for build instructions.
 
 ## How to play
 
