@@ -33,6 +33,8 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 | 12 | Recursion | [class-12](class-12-functions-recursion/) |
 | 13 | Integration of Concepts Reviewed | [class-13](class-13-concepts-integration/) |
 | 14 | **Second Evaluation Instance** | — |
+| 15 | Git | — |
+| 16 | Simple game | [class-16](class-16-simple-game/) |
 
 ### Module 3 — Data Structures and Algorithms
 
