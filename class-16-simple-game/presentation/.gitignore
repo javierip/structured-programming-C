@@ -1,0 +1,8 @@
+# Custom Beamer theme, fetched from https://github.com/javierip/custom-beamer
+# at build time by run.sh — not tracked here.
+beamerthemeUTN-BHI.sty
+theme/
+.custom-beamer/
+
+# LaTeX build output
+output/

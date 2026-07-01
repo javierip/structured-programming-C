@@ -1,0 +1,327 @@
+\documentclass[]{beamer}
+
+% Font encoding and input
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+
+% Core packages
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\usepackage[spanish]{babel} %use your language
+
+\setbeamertemplate{bibliography item}[text]
+
+\usetheme{UTN-BHI}
+
+% Enhanced code style
+\lstdefinestyle{myCStyle}{
+  language=C,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!60!black},
+  stringstyle=\color{red},
+  numberstyle=\tiny\color{gray},
+  showspaces=false,
+  showstringspaces=false,
+  breaklines=true,
+  numbers=left,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  captionpos=b
+}
+
+\urldef{\email}\path|jiparraguirre@frbb.utn.edu.ar|
+\title[Juego Simple: Pong]{Juego Simple: Pong}
+\subtitle{Integración de conceptos (semanas 9 a 13), de la consola a los gráficos}
+
+\author[J. Iparraguirre] {Javier Iparraguirre}
+
+\institute{
+Universidad Tecnológica Nacional\\
+11 de abril 461, Bahía Blanca, Argentina\\
+\email\\
+\url{http://www.frbb.utn.edu.ar/}}
+
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Contenido}
+  \tableofcontents
+\end{frame}
+
+\section{Objetivo del proyecto}
+\begin{frame}
+  \frametitle{Objetivo del proyecto}
+  \begin{itemize}
+    \item Construir un juego de \textbf{Pong} mínimo que \textbf{integre} los conceptos vistos entre las semanas 9 y 13.
+    \item Usar \textbf{únicamente variables simples}: sin estructuras y sin punteros en la lógica del juego.
+    \item Mostrar la \textbf{misma lógica} en dos versiones que se pueden leer lado a lado:
+    \begin{itemize}
+      \item Versión de \textbf{consola} (dibuja con \texttt{printf}).
+      \item Versión \textbf{gráfica} con \textbf{SDL3} (dibuja rectángulos de color).
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\section{El juego: Pong}
+\begin{frame}
+  \frametitle{El juego: Pong}
+  \begin{itemize}
+    \item Controlás la paleta izquierda; la computadora controla la paleta derecha.
+    \item La pelota rebota en las paredes y en las paletas. Si pasa a un jugador, el otro suma un punto.
+    \item Gana el primero en llegar a \textbf{5 puntos}.
+  \end{itemize}
+  \vspace{1em}
+  \textbf{Controles}
+  \begin{itemize}
+    \item \texttt{W} $\rightarrow$ mover la paleta hacia arriba.
+    \item \texttt{S} $\rightarrow$ mover la paleta hacia abajo.
+    \item \texttt{ESC} $\rightarrow$ salir del juego.
+  \end{itemize}
+\end{frame}
+
+\section{Conceptos integrados}
+\begin{frame}
+  \frametitle{Conceptos integrados (semanas 9 a 13)}
+  \begin{table}
+  \centering
+  \begin{tabular}{@{}cll@{}}
+  \toprule
+  \textbf{Semana} & \textbf{Concepto} & \textbf{Dónde aparece en el juego} \\
+  \midrule
+  9  & Bucle \texttt{while}       & Bucle principal y lectura del teclado \\
+  10 & Bucles \texttt{for}        & Dibujar el campo de juego \\
+  11 & Funciones con prototipos   & Todo el juego se divide en funciones \\
+  12 & Recursión                  & Cuenta regresiva del inicio \\
+  13 & \texttt{switch}            & Control por teclado (W / S / ESC) \\
+  \bottomrule
+  \end{tabular}
+  \caption{Cada semana aporta una pieza del programa.}
+  \end{table}
+\end{frame}
+
+\section{Estructura del programa}
+\begin{frame}[fragile]
+  \frametitle{Estructura: variables globales y prototipos (semana 11)}
+  \lstset{style=myCStyle}
+  \begin{lstlisting}
+/* Estado global del juego (sin estructuras). */
+int ball_x, ball_y;      /* posicion de la pelota  */
+int ball_dx, ball_dy;    /* direccion (-1 / +1)    */
+int left_paddle_y;       /* paleta del jugador     */
+int right_paddle_y;      /* paleta de la computadora */
+int player_score, computer_score;
+int game_running;
+
+/* Prototipos de funciones (semana 11). */
+void setup_game(void);
+void countdown(int n);
+void draw_field(void);
+void handle_input(void);
+void move_ball(void);
+  \end{lstlisting}
+\end{frame}
+
+\section{Semana 9: el bucle principal}
+\begin{frame}[fragile]
+  \frametitle{Semana 9: el bucle principal \texttt{while}}
+  \lstset{style=myCStyle}
+  \begin{lstlisting}
+countdown(3);      /* cuenta regresiva (recursion) */
+setup_game();
+
+/* Bucle principal del juego (semana 9). */
+while (game_running)
+{
+    draw_field();      /* dibujar   (semana 10) */
+    handle_input();    /* teclado   (semana 13) */
+    move_ball();
+    move_computer();
+    check_paddles();
+    Sleep(120);        /* SDL_Delay(120) en SDL */
+}
+  \end{lstlisting}
+\end{frame}
+
+\section{Semana 10: dibujar con \texttt{for}}
+\begin{frame}[fragile]
+  \frametitle{Semana 10: dibujar el campo con bucles \texttt{for}}
+  \lstset{style=myCStyle}
+  \begin{lstlisting}
+/* Recorre el campo fila por fila. */
+for (row = 1; row < HEIGHT - 1; row++)
+{
+    for (col = 0; col < WIDTH; col++)
+    {
+        if (col == 0 || col == WIDTH - 1)
+            printf("#");        /* paredes    */
+        else if (col == ball_x && row == ball_y)
+            printf("O");        /* pelota     */
+        else
+            printf(" ");
+    }
+    printf("\n");
+}
+  \end{lstlisting}
+\end{frame}
+
+\section{Semana 12: recursión}
+\begin{frame}[fragile]
+  \frametitle{Semana 12: recursión (cuenta regresiva)}
+  \lstset{style=myCStyle}
+  \begin{lstlisting}
+/* Cuenta regresiva recursiva antes de empezar. */
+void countdown(int n)
+{
+    if (n == 0)          /* caso base */
+    {
+        printf("GO!\n");
+        return;
+    }
+    printf("%d...\n", n);
+    Sleep(700);
+    countdown(n - 1);    /* llamada recursiva */
+}
+  \end{lstlisting}
+\end{frame}
+
+\section{Semana 13: \texttt{switch} y teclado}
+\begin{frame}[fragile]
+  \frametitle{Semana 13: \texttt{switch} para el control por teclado}
+  \lstset{style=myCStyle}
+  \begin{lstlisting}
+while (_kbhit())
+{
+    key = _getch();
+    switch (key)            /* integracion (semana 13) */
+    {
+    case 'w': case 'W':
+        if (left_paddle_y > 1) left_paddle_y--;
+        break;
+    case 's': case 'S':
+        if (left_paddle_y + PADDLE_HEIGHT < HEIGHT - 1)
+            left_paddle_y++;
+        break;
+    case 27:                /* ESC */
+        game_running = 0;
+        break;
+    }
+}
+  \end{lstlisting}
+\end{frame}
+
+\section{Sin estructuras ni punteros}
+\begin{frame}
+  \frametitle{Una decisión de diseño: variables simples}
+  \begin{itemize}
+    \item Todo el estado del juego se guarda en \textbf{variables globales simples} (\texttt{int}), no en estructuras.
+    \item La lógica del juego \textbf{no usa punteros}: es la misma que ya sabemos escribir.
+    \item Así el foco queda en los conceptos de las semanas 9 a 13, no en temas nuevos.
+    \item En la versión SDL, los únicos punteros/estructuras inevitables son los que la \textbf{propia librería} necesita (ventana, renderer, \texttt{SDL\_FRect}).
+  \end{itemize}
+\end{frame}
+
+\section{Dos versiones: consola y SDL3}
+\begin{frame}
+  \frametitle{La misma lógica, dos versiones}
+  \small
+  \begin{table}
+  \centering
+  \begin{tabular}{@{}p{3.1cm}p{3.0cm}p{3.4cm}@{}}
+  \toprule
+  \textbf{Concepto} & \textbf{Consola} & \textbf{SDL3} \\
+  \midrule
+  Bucle principal   & \texttt{while (game\_running)} & igual \\
+  Dibujo (for)      & \texttt{printf} de caracteres  & \texttt{draw\_cell()} + rectángulos \\
+  Recursión         & \texttt{countdown()}           & igual \\
+  Teclado (switch)  & \texttt{\_getch()}             & \texttt{event.key.scancode} \\
+  Entrada           & \texttt{\_kbhit()}            & \texttt{SDL\_PollEvent()} \\
+  Espera            & \texttt{Sleep(120)}           & \texttt{SDL\_Delay(120)} \\
+  \bottomrule
+  \end{tabular}
+  \caption{El esqueleto es idéntico; solo cambia el dibujo y la entrada.}
+  \end{table}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Versión SDL3: mismo \texttt{switch}, otra fuente de teclas}
+  \lstset{style=myCStyle}
+  \begin{lstlisting}
+while (SDL_PollEvent(&event))
+{
+    if (event.type == SDL_EVENT_KEY_DOWN)
+    {
+        switch (event.key.scancode)
+        {
+        case SDL_SCANCODE_W: /* ... */ break;
+        case SDL_SCANCODE_S: /* ... */ break;
+        case SDL_SCANCODE_ESCAPE:
+            game_running = 0;
+            break;
+        }
+    }
+}
+  \end{lstlisting}
+\end{frame}
+
+\section{Cómo compilar y jugar}
+\begin{frame}
+  \frametitle{Cómo compilar y jugar}
+  \textbf{Versión de consola} (\texttt{super-simple-game/})
+  \begin{itemize}
+    \item Compilar \texttt{super-simple-game.cpp} con un compilador de C/C++ en Windows.
+    \item Usa \texttt{conio.h} y \texttt{windows.h} (consola de Windows).
+  \end{itemize}
+  \vspace{0.8em}
+  \textbf{Versión gráfica} (\texttt{super-simple-game-SDL/})
+  \begin{enumerate}
+    \item Descargar SDL3 (\emph{SDL3-devel-3.x.x-VC.zip}) y crear la carpeta \texttt{SDL3/} junto al proyecto.
+    \item Abrir \texttt{super-simple-game-SDL.sln} en Visual Studio 2022.
+    \item Elegir la plataforma \textbf{x64} y presionar \textbf{F5}.
+  \end{enumerate}
+\end{frame}
+
+\section{Conclusión}
+\begin{frame}
+  \frametitle{Progresión del aprendizaje}
+  \begin{itemize}
+    \item \textbf{Consola:} integramos while, for, funciones, recursión y switch en un programa completo.
+    \item \textbf{SDL3:} el \textbf{mismo} programa aprende a dibujarse en una ventana gráfica.
+    \item Idea clave: los conceptos básicos alcanzan para un juego real; el paso a gráficos \textbf{no} cambia la lógica.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \begin{beamercolorbox}[sep=8pt,center]{title}
+      \Large{¡Gracias!}
+    \end{beamercolorbox}
+    \vspace{1em}
+    \huge{¿Preguntas?}\\
+    \vspace{1em}
+    \small{\email}
+  \end{center}
+\end{frame}
+
+\section{Referencias}
+\begin{frame}[allowframebreaks]
+  \frametitle{Referencias}
+  \bibliographystyle{alpha}
+  \bibliography{references}
+\end{frame}
+
+\end{document}
