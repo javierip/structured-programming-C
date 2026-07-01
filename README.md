@@ -30,16 +30,14 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 | 9 | Repetition - I | [class-09](class-09-iteration-while/) |
 | 10 | Repetition - II | [class-10](class-10-iteration-for/) |
 | 11 | Functions | [class-11](class-11-functions/) |
-| 12 | Recursion | [class-11](class-11-functions-recursion/) |
-| 13 | Integration of Concepts Reviewed | — |
+| 12 | Recursion | [class-12](class-12-functions-recursion/) |
+| 13 | Integration of Concepts Reviewed | [class-13](class-13-concepts-integration/) |
 | 14 | **Second Evaluation Instance** | — |
 
 ### Module 3 — Data Structures and Algorithms
 
 | Week | Topic | Materials |
 |------|-------|-----------|
-| 15 | Introduction to Microcontrollers | [launchpad](class-extra-01-launchpad/) |
-| 16 | Version Control Software | — |
 | 17 | Matrices and Vectors | [class-13](class-13-vectors-matrices/) |
 | 18 | Search | [class-14](class-14-search/) |
 | 19 | Sorting | [class-15](class-15-sort/) |
