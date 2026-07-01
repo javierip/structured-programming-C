@@ -19,15 +19,15 @@ colored rectangles instead of printed characters.
 
 Both programs share the exact same skeleton and the same teaching concepts:
 
-| Concept (week)              | Console version          | SDL version                         |
-| --------------------------- | ------------------------ | ----------------------------------- |
-| Main game loop (9)          | `while (game_running)`   | `while (game_running)` (unchanged)  |
-| for loops for drawing (10)  | nested `printf` loops    | same nested loops, `draw_cell()`    |
-| Functions with prototypes (11) | `move_ball`, `reset_ball`, ... | same names and logic         |
-| Recursion (12)              | `countdown()`            | `countdown()` (unchanged idea)      |
-| switch + integration (13)   | `switch` on `_getch()`   | `switch` on the key scancode        |
-| Keyboard input              | `_kbhit()` / `_getch()`  | `SDL_PollEvent()`                   |
-| Drawing                     | `printf` of text characters | `SDL_RenderFillRect` / debug text |
+| Concept (week)                  | Console version                | SDL version                        |
+| ------------------------------- | ------------------------------ | ---------------------------------- |
+| Main game loop (9)              | `while (game_running)`         | `while (game_running)` (unchanged) |
+| for loops for drawing (10)      | nested `printf` loops          | same nested loops, `draw_cell()`   |
+| Functions with prototypes (11)  | `move_ball`, `reset_ball`, ... | same names and logic               |
+| Recursion (12)                  | `countdown()`                  | `countdown()` (unchanged idea)     |
+| switch + integration (13)       | `switch` on `_getch()`         | `switch` on the key scancode       |
+| Keyboard input                  | `_kbhit()` / `_getch()`        | `SDL_PollEvent()`                  |
+| Drawing                         | `printf` of text characters    | `SDL_RenderFillRect` / debug text  |
 
 The game still runs on a **WIDTH × HEIGHT grid of cells** (40 × 20). Each cell is
 drawn as a `CELL_SIZE`-pixel rectangle, so the window is 800 × 400. The state is
@@ -54,7 +54,7 @@ Download the official Visual C++ development package from the SDL website
 contents into a new `SDL3/` folder next to the project, so the layout looks
 exactly like this:
 
-```
+```text
 super-simple-game-SDL/
 ├── main.cpp
 ├── super-simple-game-SDL.sln
@@ -83,7 +83,7 @@ So once the folder is in place there is nothing else to configure.
 
 ## Files
 
-```
+```text
 super-simple-game-SDL/
 ├── main.cpp                       # the whole game (well commented)
 ├── super-simple-game-SDL.sln      # Visual Studio solution
