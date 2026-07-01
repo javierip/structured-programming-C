@@ -10,7 +10,7 @@
  * simple global variables. Windows console version.
  *
  * Author: Javier Iparraguirre
- * E-mail: jiparraguirre@frbb.utn.edu
+ * E-mail: jiparraguirre@frbb.utn.edu.ar
  */
 
 #define _CRT_SECURE_NO_WARNINGS
