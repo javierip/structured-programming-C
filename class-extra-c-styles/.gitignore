@@ -1,0 +1,22 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.pdf
+
+# Custom Beamer theme: external repository, cloned locally, never committed here
+custom-beamer/
+
+# Compiled binaries from the C examples
+codigo/clasico
+codigo/moderno
+codigo/c23
+codigo/*.o
+codigo/archivo1.txt

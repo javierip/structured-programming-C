@@ -1,0 +1,767 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Font encoding and input
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+
+% Core packages
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\usepackage[spanish]{babel} %use your language
+
+\setbeamertemplate{bibliography item}[text]
+
+\usetheme{UTN-BHI}
+
+% El tema UTN-BHI está diseñado para 4:3. Como esta presentación es 16:9,
+% se centra el fondo a la altura de la página en lugar de estirarlo, para que
+% el logo no quede deformado.
+\usebackgroundtemplate{%
+  \hbox to \paperwidth{\hss\includegraphics[height=\paperheight]{theme/utn-bhi-page}\hss}}
+
+% Espacio reservado al pie para que el texto no se superponga con el logo.
+\setbeamertemplate{footline}{\rule{0pt}{0.9cm}}
+
+% Tablas un poco más compactas, para que las más largas entren en la diapositiva.
+\usepackage{etoolbox}
+\renewcommand{\arraystretch}{0.95}
+\AtBeginEnvironment{tabular}{\footnotesize}
+% Sin justificado en las celdas de tipo p/X: evita los huecos entre palabras y
+% los cortes de palabra raros en las columnas angostas.
+\usepackage{ragged2e}
+\makeatletter
+\g@addto@macro\@arrayparboxrestore{\RaggedRight\hyphenpenalty=5000}
+\makeatother
+
+% Add a section slide.
+% Remove it if you prefer that option.
+% \AtBeginSection[]{
+%   \begin{frame}
+%   \vfill
+%   \centering
+%   \begin{beamercolorbox}[sep=8pt,center]{title}
+%     \usebeamerfont{title}\insertsectionhead\par%
+%   \end{beamercolorbox}
+%   \vfill
+%   \end{frame}
+% }
+
+% Enhanced code style
+\lstdefinestyle{myC++Style}{
+  language=C++,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!60!black},
+  stringstyle=\color{red},
+  numberstyle=\tiny\color{gray},
+  showspaces=false,
+  showstringspaces=false,
+  breaklines=true,
+  numbers=left,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  captionpos=b
+}
+
+% Estilo por defecto para todos los listados: el de arriba, pero en C y en un
+% cuerpo que entra en las columnas de las diapositivas comparativas.
+\lstset{
+  style=myC++Style,
+  language=C,
+  basicstyle=\ttfamily\scriptsize,
+  columns=flexible,
+  numbersep=4pt,
+  xleftmargin=1.2em,
+  aboveskip=0.6em,
+  belowskip=0.3em
+}
+
+\urldef{\email}\path|jiparraguirre@frbb.utn.edu.ar|
+\title{Dos formas de escribir el mismo programa en C}
+\author[J. Iparraguirre] {Javier Iparraguirre}
+
+\institute{
+Universidad Tecnológica Nacional\\
+11 de abril 461, Bahía Blanca, Argentina\\
+\email\\
+\url{http://www.frbb.utn.edu.ar/}}
+
+
+
+\begin{document}
+
+% ------------------------------------------------------------
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Objetivo de la clase}
+    \begin{itemize}
+        \item Partimos de un \textbf{mismo enunciado} y una \textbf{misma solución funcional}.
+        \item Vamos a comparar dos formas de escribirla:
+        \begin{itemize}
+            \item[\textbf{(1)}] Estilo \textbf{clásico}: el que normalmente alcanza para aprobar un examen.
+            \item[\textbf{(2)}] Estilo \textbf{moderno}: el que se espera en código de uso real.
+        \end{itemize}
+        \item La idea \textbf{no} es que un estilo sea ``correcto'' y el otro ``incorrecto''.
+        \item La idea es entender \textbf{qué problema resuelve cada decisión de diseño}.
+    \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{El problema que vamos a resolver}
+    \small
+    Escribir un programa que:
+    \begin{enumerate}
+        \item Genere un archivo de texto con $N$ enteros aleatorios en $[1000, 2000]$.
+        \item Cargue esos $N$ números desde el archivo a un arreglo.
+        \item Ordene el arreglo por el método de \textbf{inserción}.
+        \item Imprima el arreglo ordenado.
+        \item Todo integrado desde \texttt{main()}, pidiendo $N$ al usuario.
+    \end{enumerate}
+
+    \vspace{0.5em}
+    \begin{block}{Por qué este ejercicio es un buen caso de estudio}
+        Combina \textbf{archivos}, \textbf{arreglos}, \textbf{memoria dinámica} y
+        \textbf{entrada de usuario}: los cuatro lugares donde más se nota la diferencia
+        entre "que compile" y "que sea robusto".
+    \end{block}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Dos estilos, mismo comportamiento}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \begin{block}{Estilo clásico}
+            \begin{itemize}
+                \item \texttt{int} para todo (incluso tamaños)
+                \item \texttt{scanf} directo
+                \item Poca verificación de errores
+                \item Literales ``mágicos''
+            \end{itemize}
+        \end{block}
+
+        \column{0.5\textwidth}
+        \begin{block}{Estilo moderno}
+            \begin{itemize}
+                \item \texttt{size\_t}, \texttt{bool}
+                \item \texttt{fgets} + \texttt{strtol}
+                \item Toda función que puede fallar, se verifica
+                \item Constantes con nombre
+            \end{itemize}
+        \end{block}
+    \end{columns}
+
+    \vspace{1em}
+    \begin{center}
+        \textit{Ambos programas producen exactamente el mismo resultado.}
+    \end{center}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Tabla comparativa general}
+    \small
+    \begin{table}
+        \begin{tabular}{p{3.3cm}p{4.2cm}p{4.2cm}}
+            \toprule
+            \textbf{Aspecto} & \textbf{Estilo clásico} & \textbf{Estilo moderno} \\
+            \midrule
+            Tipos para tamaños & \texttt{int} & \texttt{size\_t} \\
+            Valores booleanos & \texttt{int} (0/1) & \texttt{bool} (\texttt{stdbool.h}) \\
+            Lectura de enteros & \texttt{scanf("\%d", \ldots)} & \texttt{fgets} + \texttt{strtol} \\
+            Verificación de I/O & Parcial & En cada llamada \\
+            Visibilidad de funciones & Global (implícita) & \texttt{static} cuando aplica \\
+            Constantes & Literales en el código & \texttt{\#define} con nombre \\
+            Reserva de memoria & \texttt{sizeof(int)} & \texttt{sizeof *puntero} \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{1. Tipos para representar tamaños}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Clásico}
+        \begin{lstlisting}
+void ordenarInsercion(
+    int arreglo[], int n)
+{
+    for (int i = 1; i < n; i++) {
+        ...
+    }
+}
+        \end{lstlisting}
+
+        \column{0.48\textwidth}
+        \textbf{Moderno}
+        \begin{lstlisting}
+static void ordenarInsercion(
+    int *arreglo, size_t n)
+{
+    for (size_t i = 1; i < n; i++) {
+        ...
+    }
+}
+        \end{lstlisting}
+    \end{columns}
+
+    \vspace{0.5em}
+    \begin{alertblock}{¿Por qué importa?}
+        Un tamaño o una cantidad de elementos \textbf{nunca es negativo}.
+        \texttt{size\_t} es un tipo \textbf{sin signo} que expresa esa garantía
+        y evita comparaciones ambiguas entre \texttt{int} con signo y valores sin signo.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{2. Comunicar éxito o fracaso}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Clásico}
+        \begin{lstlisting}
+void generarArchivo(int n)
+{
+    FILE *f = fopen(FILENAME,"w");
+    if (f == NULL) {
+        printf("Error...\n");
+        exit(1);
+    }
+    ...
+}
+        \end{lstlisting}
+
+        \column{0.48\textwidth}
+        \textbf{Moderno}
+        \begin{lstlisting}
+static bool generarArchivo(size_t n)
+{
+    FILE *f = fopen(FILENAME,"w");
+    if (!f) {
+        fprintf(stderr, "Error...\n");
+        return false;
+    }
+    ...
+    return true;
+}
+        \end{lstlisting}
+    \end{columns}
+
+    \vspace{0.5em}
+    \begin{alertblock}{¿Por qué importa?}
+        \texttt{exit(1)} corta el programa \textbf{desde adentro} de una función auxiliar,
+        sin darle a quien la llamó la oportunidad de decidir qué hacer.
+        Devolver \texttt{bool} deja esa decisión en manos de \texttt{main}.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{3. Verificación de cada operación de E/S}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Clásico}
+        \begin{lstlisting}
+for (int i = 0; i < n; i++) {
+    fscanf(f, "%d", &arreglo[i]);
+}
+        \end{lstlisting}
+        \vspace{1em}
+        Si el archivo tiene menos números de los esperados, el arreglo queda
+        con \textbf{basura} sin que nadie se entere.
+
+        \column{0.48\textwidth}
+        \textbf{Moderno}
+        \begin{lstlisting}
+for (size_t i = 0; i < n; i++) {
+    if (fscanf(f, "%d",
+               &arreglo[i]) != 1) {
+        fprintf(stderr, "Error...\n");
+        fclose(f);
+        return false;
+    }
+}
+        \end{lstlisting}
+    \end{columns}
+
+    \vspace{0.3em}
+    \begin{alertblock}{Idea clave}
+        \texttt{fscanf} devuelve la cantidad de campos que logró leer.
+        Ignorar ese valor de retorno es ignorar información que la función
+        ya nos está dando.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{4. Leer un número desde teclado}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Clásico}
+        \begin{lstlisting}
+int n;
+printf("Ingrese N: ");
+scanf("%d", &n);
+        \end{lstlisting}
+        \vspace{1em}
+        \small Si el usuario escribe \texttt{"abc"}, el comportamiento
+        es indefinido: \texttt{n} puede quedar sin inicializar.
+
+        \column{0.48\textwidth}
+        \textbf{Moderno}
+        \begin{lstlisting}
+char linea[64];
+fgets(linea, sizeof linea, stdin);
+
+char *endptr;
+long valor = strtol(linea,
+                     &endptr, 10);
+
+if (endptr == linea || valor <= 0)
+    /* entrada invalida */
+        \end{lstlisting}
+    \end{columns}
+
+    \vspace{0.3em}
+    \begin{alertblock}{Idea clave}
+        \texttt{fgets} siempre lee una línea completa (sin desbordar el buffer);
+        \texttt{strtol} permite \textbf{detectar} si lo que se escribió era
+        realmente un número.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{5. \texttt{const} correctness}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Clásico}
+        \begin{lstlisting}
+void imprimirArreglo(
+    int arreglo[], int n)
+        \end{lstlisting}
+
+        \column{0.48\textwidth}
+        \textbf{Moderno}
+        \begin{lstlisting}
+static void imprimirArreglo(
+    const int *arreglo, size_t n)
+        \end{lstlisting}
+    \end{columns}
+
+    \vspace{1em}
+    \begin{alertblock}{¿Por qué importa?}
+        La firma con \texttt{const} es una \textbf{promesa documentada en el
+        propio código}: esta función \textit{no puede} modificar el arreglo.
+        El compilador la hace cumplir; no depende de leer el cuerpo de la función
+        para confiar en eso.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{6. Reserva de memoria dinámica}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Clásico}
+        \begin{lstlisting}
+int *arreglo =
+    (int *) malloc(n * sizeof(int));
+        \end{lstlisting}
+
+        \column{0.48\textwidth}
+        \textbf{Moderno}
+        \begin{lstlisting}
+int *arreglo =
+    malloc(n * sizeof *arreglo);
+        \end{lstlisting}
+    \end{columns}
+
+    \vspace{1em}
+    \begin{alertblock}{¿Por qué importa?}
+        Si el día de mañana \texttt{arreglo} cambia de \texttt{int *} a
+        \texttt{double *}, la versión con \texttt{sizeof *arreglo} sigue
+        siendo correcta sin tocar esa línea. La versión con
+        \texttt{sizeof(int)} queda desincronizada del tipo real.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{7. Constantes con nombre}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Clásico}
+        \begin{lstlisting}
+int numero = 1000 + rand() % 1001;
+        \end{lstlisting}
+
+        \column{0.48\textwidth}
+        \textbf{Moderno}
+        \begin{lstlisting}
+#define RANGO_MIN 1000
+#define RANGO_MAX 2000
+...
+int numero = RANGO_MIN +
+    rand() % (RANGO_MAX - RANGO_MIN + 1);
+        \end{lstlisting}
+    \end{columns}
+
+    \vspace{1em}
+    \begin{alertblock}{¿Por qué importa?}
+        El \texttt{1001} del estilo clásico es un ``número mágico'': funciona,
+        pero no dice por qué es \texttt{1001} y no otro valor. Con constantes
+        nombradas, el rango se puede cambiar en \textbf{un solo lugar}.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{8. Visibilidad de las funciones: \texttt{static}}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Clásico}
+        \begin{lstlisting}
+void ordenarInsercion(
+    int arreglo[], int n)
+        \end{lstlisting}
+        \small Visible desde cualquier otro archivo \texttt{.c} del proyecto.
+
+        \column{0.48\textwidth}
+        \textbf{Moderno}
+        \begin{lstlisting}
+static void ordenarInsercion(
+    int *arreglo, size_t n)
+        \end{lstlisting}
+        \small Solo visible dentro de este archivo.
+    \end{columns}
+
+    \vspace{1em}
+    \begin{alertblock}{¿Por qué importa?}
+        Cuando un programa crece a varios archivos, marcar como \texttt{static}
+        las funciones que son ``detalles internos'' evita colisiones de nombres
+        y deja claro cuál es la interfaz pública del módulo.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Un paso más: C11 y C23}
+    \begin{itemize}
+        \item Hasta ahora comparamos \textbf{C99 clásico} vs. \textbf{C99 moderno}:
+              dos formas de escribir lo mismo dentro del \textbf{mismo estándar}.
+        \item El lenguaje C también evolucionó: \textbf{C11} (2011) y
+              \textbf{C23} (2024) agregaron herramientas nuevas al lenguaje.
+        \item Vamos a ver cuáles de esas herramientas se aplican directamente
+              a nuestro ejercicio, y por qué.
+    \end{itemize}
+
+    \vspace{1em}
+    \begin{alertblock}{Antes de avanzar: soporte de compiladores}
+        C23 es muy reciente. GCC lo soporta desde la versión 13 (con la bandera
+        \texttt{-std=c2x} o, en versiones más nuevas, \texttt{-std=c23}) y Clang
+        desde la versión 16--18 según la característica. \textbf{Siempre
+        verifiquen la versión del compilador} antes de usar estas
+        características en un trabajo práctico.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Historial cronológico de versiones de C (1/2)}
+    \small
+    \begin{table}
+        \begin{tabularx}{\textwidth}{l p{2.8cm} c X}
+            \toprule
+            \textbf{Versión} & \textbf{Nombre del estándar} & \textbf{Año} & \textbf{Hito clave / características añadidas} \\
+            \midrule
+            \textbf{K\&R C} & Pre-estándar & 1978 & Escrito por Brian Kernighan y Dennis Ritchie; base original e informal del lenguaje. \\
+            \addlinespace
+            \textbf{C89} & ANSI X3.159-1989 & 1989 & Primera versión oficial estandarizada, para mejorar la portabilidad entre plataformas. \\
+            \addlinespace
+            \textbf{C90} & ISO/IEC 9899:1990 & 1990 & Idéntica a C89, adoptada formalmente por ISO a nivel global. \\
+            \addlinespace
+            \textbf{C95} & ISO/IEC 9899/AMD1 & 1995 & Soporte para caracteres multibyte y anchos, para software internacional. \\
+            \addlinespace
+            \textbf{C99} & ISO/IEC 9899:1999 & 1999 & Funciones \texttt{inline}, arreglos de longitud variable, \texttt{long long int}, comentarios \texttt{//}. \\
+            \bottomrule
+        \end{tabularx}
+    \end{table}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Historial cronológico de versiones de C (2/2)}
+    \small
+    \begin{table}
+        \begin{tabularx}{\textwidth}{l p{2.8cm} c X}
+            \toprule
+            \textbf{Versión} & \textbf{Nombre del estándar} & \textbf{Año} & \textbf{Hito clave / características añadidas} \\
+            \midrule
+            \textbf{C11} & ISO/IEC 9899:2011 & 2011 & Hilos (multithreading), operaciones atómicas y Unicode. \\
+            \addlinespace
+            \textbf{C17} & ISO/IEC 9899:2018 & 2018 & Mantenimiento y corrección de errores; sin características nuevas. \\
+            \addlinespace
+            \textbf{C23} & ISO/IEC 9899:2024 & 2024 & Estándar más reciente ratificado: \texttt{nullptr}, \texttt{bool}, \texttt{typeof}, atributos. \\
+            \addlinespace
+            \textbf{C2Y} & En desarrollo & Próximo & Borrador experimental actual para la próxima especificación oficial. \\
+            \bottomrule
+        \end{tabularx}
+    \end{table}
+
+    \vspace{1em}
+    \small Las próximas diapositivas profundizan en \textbf{C11} y \textbf{C23},
+    las dos versiones más relevantes para nuestro ejercicio.
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Novedades de C11 (2011)}
+    \small
+    \begin{table}
+        \begin{tabular}{p{4.3cm}p{7.5cm}}
+            \toprule
+            \textbf{Característica} & \textbf{Para qué sirve} \\
+            \midrule
+            \texttt{\_Static\_assert} & Verificar condiciones \textbf{en tiempo de compilación} \\
+            \texttt{\_Generic} & Elegir código según el tipo de un argumento (``sobrecarga'' simple) \\
+            \texttt{\_Noreturn} & Documentar que una función nunca retorna (ej. un wrapper de \texttt{exit}) \\
+            Uniones/estructuras anónimas & Acceder a miembros sin nombrar la unión/estructura contenedora \\
+            \texttt{\_Alignas} / \texttt{\_Alignof} & Controlar y consultar el alineamiento en memoria de un tipo \\
+            \texttt{<threads.h>}, \texttt{<stdatomic.h>} & Hilos y operaciones atómicas estandarizadas (antes dependían del SO) \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \vspace{0.3em}
+    \small De todas estas, la que más directamente mejora nuestro ejercicio
+    es \texttt{\_Static\_assert}.
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{C11 aplicado: \texttt{static\_assert}}
+    \begin{lstlisting}
+static_assert(RANGO_MAX > RANGO_MIN,
+    "RANGO_MAX debe ser mayor que RANGO_MIN");
+    \end{lstlisting}
+
+    \vspace{0.5em}
+    \begin{alertblock}{¿Por qué importa?}
+        Esta verificación se evalúa \textbf{cuando se compila} el programa,
+        no cuando se ejecuta. Si alguien invierte los valores de
+        \texttt{RANGO\_MIN} y \texttt{RANGO\_MAX} por error, el programa
+        \textbf{ni siquiera compila} — no hace falta ejecutarlo ni escribir
+        un test para descubrir el error.
+    \end{alertblock}
+
+    \vspace{0.3em}
+    \small \texttt{<assert.h>} expone la macro \texttt{static\_assert} desde
+    C11 (por debajo, expande a \texttt{\_Static\_assert}). En C23 pasó a ser
+    directamente una palabra clave del lenguaje.
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Novedades de C23 (2024)}
+    \small
+    \begin{table}
+        \begin{tabular}{p{4.3cm}p{7.5cm}}
+            \toprule
+            \textbf{Característica} & \textbf{Para qué sirve} \\
+            \midrule
+            \texttt{bool}/\texttt{true}/\texttt{false} & Palabras clave del lenguaje: ya no se necesita \texttt{<stdbool.h>} \\
+            \texttt{nullptr} & Puntero nulo con tipo propio, en vez de reusar \texttt{NULL}/\texttt{0} \\
+            \texttt{constexpr} & Constantes evaluadas en tiempo de compilación, con tipo (mejora a \texttt{\#define}) \\
+            \texttt{typeof} & Obtener el tipo de una expresión para usarlo en otra declaración \\
+            \texttt{auto} & Inferencia de tipo a partir del inicializador \\
+            \texttt{[[atributos]]} & Anotaciones estándar como \texttt{[[nodiscard]]}, \texttt{[[deprecated]]} \\
+            \texttt{\#embed} & Incluir un archivo binario directamente como datos en el código \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \vspace{0.3em}
+    \small De estas, \texttt{bool}/\texttt{true}/\texttt{false},
+    \texttt{nullptr}, \texttt{constexpr} y \texttt{[[nodiscard]]} se aplican
+    directamente a nuestro ejercicio.
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{C23 aplicado: \texttt{bool} y \texttt{nullptr}}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Moderno (C99)}
+        \begin{lstlisting}
+#include <stdbool.h>
+...
+FILE *f = fopen(FILENAME, "w");
+if (f == NULL) {
+    ...
+}
+        \end{lstlisting}
+
+        \column{0.48\textwidth}
+        \textbf{C23}
+        \begin{lstlisting}
+/* sin stdbool.h: bool es
+   palabra clave */
+FILE *f = fopen(FILENAME, "w");
+if (f == nullptr) {
+    ...
+}
+        \end{lstlisting}
+    \end{columns}
+
+    \vspace{0.5em}
+    \begin{alertblock}{¿Por qué importa?}
+        \texttt{NULL} en C99 suele ser simplemente \texttt{((void*)0)} o
+        incluso \texttt{0}: se puede confundir con un entero. \texttt{nullptr}
+        tiene su propio tipo (\texttt{nullptr\_t}) y \textbf{solo} puede
+        convertirse a puntero o a \texttt{bool} — el compilador detecta más
+        errores de tipos.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{C23 aplicado: \texttt{constexpr} en vez de \texttt{\#define}}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Moderno (C99)}
+        \begin{lstlisting}
+#define RANGO_MIN 1000
+#define RANGO_MAX 2000
+        \end{lstlisting}
+
+        \column{0.48\textwidth}
+        \textbf{C23}
+        \begin{lstlisting}
+constexpr int RANGO_MIN = 1000;
+constexpr int RANGO_MAX = 2000;
+        \end{lstlisting}
+    \end{columns}
+
+    \vspace{0.5em}
+    \begin{alertblock}{¿Por qué importa?}
+        Una macro de preprocesador \textbf{no tiene tipo} y es solo un
+        reemplazo de texto antes de compilar: el depurador no la ve, y el
+        compilador no puede avisar si se usa con el tipo equivocado.
+        \texttt{constexpr} es una variable real, con tipo, cuyo valor el
+        compilador garantiza que se calculó en tiempo de compilación.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{C23 aplicado: \texttt{[[nodiscard]]}}
+    \begin{lstlisting}
+[[nodiscard]] static bool generarArchivo(size_t n);
+    \end{lstlisting}
+
+    \vspace{0.3em}
+    Si alguien llama a la función e ignora el resultado:
+    \begin{lstlisting}
+generarArchivo(n);   /* se ignora el valor de retorno */
+    \end{lstlisting}
+
+    \vspace{0.3em}
+    el compilador avisa \textbf{en tiempo de compilación}:
+    \begin{lstlisting}[language=bash]
+warning: ignoring return value of 'generarArchivo',
+declared with attribute 'nodiscard' [-Wunused-result]
+    \end{lstlisting}
+
+    \begin{alertblock}{¿Por qué importa?}
+        En el estilo moderno (C99) ignorar un \texttt{bool} de retorno es un
+        error \textbf{silencioso}: compila sin quejas. \texttt{[[nodiscard]]}
+        convierte ese descuido en un warning visible, verificado por el
+        compilador y no por la disciplina de quien programa.
+    \end{alertblock}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}[fragile]{Código completo: dónde encontrarlo}
+    \begin{itemize}
+        \item \texttt{codigo/clasico.c} \quad — programa completo, estilo clásico (C99).
+        \item \texttt{codigo/moderno.c} \quad — programa completo, estilo moderno (C99).
+        \item \texttt{codigo/c23.c} \quad — la versión moderna, incorporando
+              \texttt{static\_assert} (C11) y \texttt{bool}/\texttt{nullptr}/
+              \texttt{constexpr}/\texttt{[[nodiscard]]} (C23).
+    \end{itemize}
+
+    \vspace{1em}
+    \begin{block}{Para la clase práctica}
+        \begin{lstlisting}[language=bash]
+gcc -std=c99 -Wall -Wextra -o clasico  clasico.c
+gcc -std=c99 -Wall -Wextra -o moderno  moderno.c
+gcc -std=c2x -Wall -Wextra -o c23      c23.c
+# En GCC 15+ y Clang 18+ tambien funciona -std=c23
+        \end{lstlisting}
+        Comparen \textbf{cuántos warnings} tira \texttt{-Wall -Wextra} en
+        cada caso, y qué errores detecta \texttt{c23.c} \textbf{antes} de
+        ejecutar el programa (\texttt{static\_assert}) que en las otras dos
+        versiones solo se notarían en tiempo de ejecución o ni se notarían.
+    \end{block}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{¿Cuándo usar cada estilo?}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Estilo clásico}
+            \begin{itemize}
+                \item Ejercicios y exámenes con tiempo acotado
+                \item Prototipos rápidos de un solo uso
+                \item Cuando el enunciado no exige robustez
+            \end{itemize}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{Estilo moderno}
+            \begin{itemize}
+                \item Cualquier código que otra persona vaya a mantener
+                \item Software que va a producción
+                \item Trabajos prácticos evaluados por calidad, no solo por ``funciona''
+            \end{itemize}
+        \end{block}
+    \end{columns}
+
+    \vspace{1em}
+    \begin{center}
+        \textbf{No es una cuestión de gusto: es elegir la herramienta según el contexto.}
+    \end{center}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Actividad para la clase}
+    \begin{enumerate}
+        \item Tomen \texttt{codigo/clasico.c} y compílenlo con \texttt{-Wall -Wextra}.
+        \item Identifiquen al menos \textbf{tres} advertencias del compilador.
+        \item Para cada una, expliquen qué principio del estilo moderno la evita.
+        \item Reescriban la función \texttt{cargarArchivo} aplicando esos principios,
+              \textbf{sin mirar} \texttt{moderno.c}.
+        \item Comparen su solución con la versión moderna del repositorio.
+        \item \textbf{Extra:} en \texttt{codigo/c23.c}, cambien a propósito
+              \texttt{RANGO\_MIN} y \texttt{RANGO\_MAX} para que el rango sea
+              inválido. Compilen de nuevo y observen qué mensaje da
+              \texttt{static\_assert} \textbf{antes} de que el programa corra.
+    \end{enumerate}
+\end{frame}
+
+% ------------------------------------------------------------
+\begin{frame}{Resumen}
+    \begin{itemize}
+        \item El estilo moderno no agrega funcionalidad: agrega \textbf{garantías}.
+        \item Cada cambio (tipos, verificación de errores, \texttt{const}, nombres)
+              responde a una pregunta concreta: \textit{``¿qué puede salir mal y cómo lo detecto?''}
+        \item Escribir C ``a la clásica'' está bien para aprender los conceptos
+              base del lenguaje.
+        \item Escribir C ``moderno'' es la base para escribir software confiable,
+              algo central en Ingeniería Eléctrica cuando el código controla
+              hardware real.
+        \item C11 y C23 no cambian estas ideas: les dan al compilador
+              \textbf{más información} (\texttt{static\_assert},
+              \texttt{constexpr}, \texttt{[[nodiscard]]}) para que las
+              garantías del estilo moderno se verifiquen automáticamente en
+              vez de depender solo de la disciplina de quien programa.
+    \end{itemize}
+\end{frame}
+
+\end{document}
