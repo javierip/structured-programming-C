@@ -40,7 +40,7 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 
 | Week | Topic | Materials |
 |------|-------|-----------|
-| 17 | Matrices and Vectors | [class-13](class-13-vectors-matrices/) |
+| 17 | Matrices and Vectors | [class-17](class-17-vectors-matrices/) |
 | 18 | Search | [class-14](class-14-search/) |
 | 19 | Sorting | [class-15](class-15-sort/) |
 | 20 | Pointers | [class-16](class-16-pointers/), [class-17](class-17-pointers-II/) |
