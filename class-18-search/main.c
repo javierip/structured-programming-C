@@ -19,7 +19,6 @@ int main()
     int array[N] = {2, 11, 27, 33, 45, 60, 72, 81, 90, 95};
     int key;
     int position_found;
-
     print_array(array, N);
     key = read_key();
     position_found = binary_seach(key, array, N);
@@ -74,7 +73,7 @@ void print_result(int key, int position)
 {
     if (position < 0)
     {
-        printf("Value not found\n", key);
+        printf("Value %d not found\n", key);
     }
     else
     {
