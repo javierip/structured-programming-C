@@ -43,7 +43,7 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 | 17 | Matrices and Vectors | [class-17](class-17-vectors-matrices/) |
 | 18 | Search | [class-18](class-18-search/) |
 | 19 | Sorting | [class-19](class-19-sort/) |
-| 20 | Pointers | [class-16](class-16-pointers/), [class-17](class-17-pointers-II/) |
+| 20 | Pointers | [class-20](class-20-pointers/) |
 | 21 | Strings | [class-18](class-18-strings/), [class-19](class-19-strings-II/) |
 | 22 | Structures | [class-20](class-20-structures/) |
 | 23 | Integration of Concepts Reviewed | — |
