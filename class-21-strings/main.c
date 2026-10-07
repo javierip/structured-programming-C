@@ -13,7 +13,7 @@ void test_content(char string_1[], char *string_2)
     if (0 > strcmp(string_1, string_2))
         printf("first argument is lower\n");
     else if (0 < strcmp(string_1, string_2))
-        printf("first argument is lower\n");
+        printf("first argument is greater\n");
     else
         printf("Same content\n");
 

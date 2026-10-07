@@ -1,6 +1,6 @@
 /* Program: Linked list example
  * Author: Javier Iparraguirre
- * E-mail: jiparraguirre@frbb.utn.edu
+ * E-mail: jiparraguirre@frbb.utn.edu.ar
  */
 
 #include <stdio.h>
@@ -13,7 +13,10 @@ typedef struct Node
     struct Node *next;
 } Node;
 
-// Function to  save the linked list to a file
+// Function to save the linked list to a file
+// Only the data of each node is saved, not the next pointers: memory
+// addresses are meaningless once the program ends, so the links are
+// rebuilt when the file is loaded.
 void saveLinkedList(Node *head, const char *filename)
 {
     FILE *file = fopen(filename, "wb");
@@ -47,6 +50,7 @@ void printLinkedList(Node *head)
     printf("\n");
 }
 
+// Function to free the memory of every node in the linked list
 void freeLinkedList(Node *head)
 {
     Node *current = head;
@@ -80,7 +84,8 @@ Node *loadLinkedList(const char *filename)
         if (newNode == NULL)
         {
             perror("Memory allocation failed");
-            fclose(file); // Close the file before returning
+            freeLinkedList(head); // Free the nodes already loaded
+            fclose(file);         // Close the file before returning
             return NULL;
         }
         newNode->data = data;
@@ -107,14 +112,21 @@ Node *loadLinkedList(const char *filename)
 // Example usage
 int main()
 {
-    // Create a sample linked list
-    Node *head = malloc(sizeof(Node));
-    head->data = 1;
-    head->next = malloc(sizeof(Node));
-    head->next->data = 2;
-    head->next->next = malloc(sizeof(Node));
-    head->next->next->data = 3;
-    head->next->next->next = NULL;
+    // Create a sample linked list, adding each node at the front
+    Node *head = NULL;
+    for (int value = 3; value >= 1; value--)
+    {
+        Node *newNode = malloc(sizeof(Node));
+        if (newNode == NULL)
+        {
+            perror("Memory allocation failed");
+            freeLinkedList(head); // Free the nodes already created
+            return 1;
+        }
+        newNode->data = value;
+        newNode->next = head;
+        head = newNode;
+    }
 
     // Save the linked list to a file
     saveLinkedList(head, "linked_list.dat");
