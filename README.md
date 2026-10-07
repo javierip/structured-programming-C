@@ -46,7 +46,7 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 | 20 | Pointers | [class-20](class-20-pointers/) |
 | 21 | Strings | [class-21](class-21-strings/) |
 | 22 | Structures | [class-22](class-22-structures/) |
-| 23 | Integration of Concepts Reviewed | — |
+| 23 | Integration of Concepts Reviewed | [class-23](class-23-integration/) |
 | 24 | **Third Evaluation Instance** | — |
 
 ### Module 4 — Advanced Topics
