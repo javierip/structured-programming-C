@@ -1,6 +1,6 @@
 /* Program: Operations over an array of structures
  * Author: Javier Iparraguirre
- * E-mail: jiparraguirre@frbb.utn.edu
+ * E-mail: jiparraguirre@frbb.utn.edu.ar
  */
 
 #include <stdlib.h>
