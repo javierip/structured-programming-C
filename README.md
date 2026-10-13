@@ -53,7 +53,7 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 
 | Week | Topic | Materials |
 |------|-------|-----------|
-| 25 | Dynamic Memory | [class-21](class-21-dynamic-memory/) |
+| 25 | Dynamic Memory | [class-25](class-25-dynamic-memory/) |
 | 26 | Sequential Access Files | [class-23](class-23-files/) |
 | 27 | Direct Access Files | [class-23](class-23-files/) |
 | 28 | Bitwise Operations | [class-24](class-24-bit-operations/) |
