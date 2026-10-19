@@ -15,7 +15,7 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 | Week | Topic | Materials |
 |------|-------|-----------|
 | 1 | Introduction | [class-01](class-01-introduction/) |
-| 2 | Computer Structure | [class-02](class-02-computer-architecture/) |
+| 2 | Computer Structure | — |
 | 3 | Algorithms | [class-03](class-03-algorithms-sequences/) |
 | 4 | Operators and Numerical Expressions | [class-04](class-04-operators-expressions/) |
 | 5 | Information Representation | [class-05](class-05-information-representation/) |
@@ -54,12 +54,12 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 | Week | Topic | Materials |
 |------|-------|-----------|
 | 25 | Dynamic Memory | [class-25](class-25-dynamic-memory/) |
-| 26 | Sequential Access Files | [class-23](class-23-files/) |
-| 27 | Direct Access Files | [class-23](class-23-files/) |
+| 26 | Sequential Access Files | [class-26-27](class-26-27-files/) |
+| 27 | Direct Access Files | [class-26-27](class-26-27-files/) |
 | 28 | Bitwise Operations | [class-24](class-24-bit-operations/) |
 | 29 | Integration of Concepts Reviewed | — |
 | 30 | **Fourth Evaluation Instance** | — |
-| 31 | Software Project Integration | [class-22](class-22-integration/), [pong](project-game-pong/) |
+| 31 | Software Project Integration | [pong](project-game-pong/) |
 | 32 | Introduction to Software Engineering | — |
 
 ## Projects
