@@ -56,7 +56,7 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 | 25 | Dynamic Memory | [class-25](class-25-dynamic-memory/) |
 | 26 | Sequential Access Files | [class-26-27](class-26-27-files/) |
 | 27 | Direct Access Files | [class-26-27](class-26-27-files/) |
-| 28 | Bitwise Operations | [class-24](class-24-bit-operations/) |
+| 28 | Bitwise Operations | [class-28](class-28-bit-operations/) |
 | 29 | Integration of Concepts Reviewed | — |
 | 30 | **Fourth Evaluation Instance** | — |
 | 31 | Software Project Integration | [pong](project-game-pong/) |
