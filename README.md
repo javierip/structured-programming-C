@@ -57,7 +57,7 @@ The course spans 32 weeks, organized into four modules separated by evaluation i
 | 26 | Sequential Access Files | [class-26-27](class-26-27-files/) |
 | 27 | Direct Access Files | [class-26-27](class-26-27-files/) |
 | 28 | Bitwise Operations | [class-28](class-28-bit-operations/) |
-| 29 | Integration of Concepts Reviewed | — |
+| 29 | Integration of Concepts Reviewed | [class-29](class-29-project-integration/) |
 | 30 | **Fourth Evaluation Instance** | — |
 | 31 | Software Project Integration | [pong](project-game-pong/) |
 | 32 | Introduction to Software Engineering | — |
